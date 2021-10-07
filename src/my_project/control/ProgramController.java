@@ -1,10 +1,11 @@
 package my_project.control;
 
-import KAGO_framework.control.DatabaseController;
 import KAGO_framework.control.ViewController;
-import my_project.model.House;
+import KAGO_framework.model.abitur.datenstrukturen.Queue;
+import my_project.model.CarRepresentation;
+import my_project.model.TrafficLight;
+import my_project.model.Washer;
 
-import javax.swing.*;
 import java.awt.event.MouseEvent;
 
 /**
@@ -14,10 +15,14 @@ import java.awt.event.MouseEvent;
 public class ProgramController {
 
     //Attribute
-
+    private double timer;
 
     // Referenzen
     private ViewController viewController;  // diese Referenz soll auf ein Objekt der Klasse viewController zeigen. Über dieses Objekt wird das Fenster gesteuert.
+    private TrafficLight trafficLight;
+    private Queue<CarRepresentation> carQueue;
+    private CarRepresentation lastCar;
+    private Washer washer;
 
     /**
      * Konstruktor
@@ -34,12 +39,17 @@ public class ProgramController {
      * Diese Methode wird genau ein mal nach Programmstart aufgerufen. Achtung: funktioniert nicht im Szenario-Modus
      */
     public void startProgram() {
-        //Hier wird eine lokale Referenz für ein House-Objekt angelegt.
-        House firstHouse = new House();
-
-        //Damit die draw-Methode des Objekts hinter firstHouse aufgerufen wird,
-        //muss dem ViewController-Objekt mitgeteilt werden, dass es das House-Objekt zeichnen soll.
-        viewController.draw(firstHouse);
+        timer = 0;
+        //Traffic-Light
+        trafficLight = new TrafficLight();
+        viewController.draw(trafficLight);
+        viewController.register(trafficLight);
+        // Car-Queue
+        carQueue = new Queue<>();
+        // Washer
+        washer = new Washer(this);
+        viewController.draw(washer);
+        viewController.register(washer);
     }
 
     /**
@@ -49,7 +59,11 @@ public class ProgramController {
      * @param dt Zeit seit letzter Frame
      */
     public void updateProgram(double dt){
-
+        timer += dt;
+        if (timer >= 8){
+            createCar();
+            timer = 0;
+        }
     }
 
 
@@ -58,6 +72,37 @@ public class ProgramController {
      * @param e das Objekt enthält alle Informationen zum Klick
      */
     public void mouseClicked(MouseEvent e){
-
+        createCar();
     }
+
+    private void createCar(){
+        CarRepresentation car;
+        if(carQueue.isEmpty()) {
+            car = new CarRepresentation(1010, 150, 1, null, this);
+            lastCar = car;
+        } else {
+            car = new CarRepresentation(1010, 150, lastCar.getIndex()+1, lastCar, this);
+            lastCar = car;
+        }
+        carQueue.enqueue(car);
+        viewController.draw(car);
+    }
+
+    public void wash(){
+        if(!carQueue.isEmpty()) {
+            if (carQueue.front().getX() < 120) {
+                carQueue.front().setWashed();
+            }
+        }
+    }
+
+    public void removeCar(){
+        viewController.removeDrawable(carQueue.front());
+        carQueue.dequeue();
+    }
+
+    public boolean getRedLight(){
+        return trafficLight.isRedLight();
+    }
+
 }
