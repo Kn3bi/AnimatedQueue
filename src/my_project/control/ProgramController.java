@@ -3,8 +3,8 @@ package my_project.control;
 import KAGO_framework.control.ViewController;
 import KAGO_framework.model.abitur.datenstrukturen.Queue;
 import my_project.model.CarRepresentation;
-import my_project.model.TrafficLight;
-import my_project.model.Washer;
+import my_project.view.TrafficLight;
+import my_project.view.WasherGUI;
 
 import java.awt.event.MouseEvent;
 
@@ -22,7 +22,7 @@ public class ProgramController {
     private TrafficLight trafficLight;
     private Queue<CarRepresentation> carQueue;
     private CarRepresentation lastCar;
-    private Washer washer;
+    private WasherGUI washer;
 
     /**
      * Konstruktor
@@ -47,7 +47,7 @@ public class ProgramController {
         // Car-Queue
         carQueue = new Queue<>();
         // Washer
-        washer = new Washer(this);
+        washer = new WasherGUI(this);
         viewController.draw(washer);
         viewController.register(washer);
     }
