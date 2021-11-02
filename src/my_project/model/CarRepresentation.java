@@ -12,10 +12,10 @@ public class CarRepresentation extends GraphicalObject {
     private boolean washed;
     private int[] color;
 
-    private CarRepresentation sees;
+    private CarRepresentation previousCar;
     private ProgramController programController;
 
-    public CarRepresentation(double x, double y, int index, CarRepresentation sees, ProgramController programController){
+    public CarRepresentation(double x, double y, int index, CarRepresentation previousCar, ProgramController programController){
         color = new int[3];
         Random r = new Random();
         if( r.nextInt(10) >= 3 ){
@@ -27,10 +27,10 @@ public class CarRepresentation extends GraphicalObject {
         this.x = x;
         this.y = y;
         this.index = index;
-        this.sees = sees;
+        this.previousCar = previousCar;
         this.programController = programController;
-        if(this.sees != null && x < this.sees.getX() +70){
-            this.x = this.sees.getX() +70;
+        if(this.previousCar != null && x < this.previousCar.getX() +70){
+            this.x = this.previousCar.getX() +70;
         }
     }
 
@@ -47,8 +47,8 @@ public class CarRepresentation extends GraphicalObject {
 
     @Override
     public void update(double dt){
-        if(sees != null && sees.getX()>25) {
-            if (x > -300 && x > sees.getX() + 70) {
+        if(previousCar != null && previousCar.getX()>25) {
+            if (x > -300 && x > previousCar.getX() + 70) {
                 move(dt);
             }
         } else {

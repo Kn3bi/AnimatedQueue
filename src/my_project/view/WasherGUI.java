@@ -1,4 +1,4 @@
-package my_project.model;
+package my_project.view;
 
 import KAGO_framework.control.Interactable;
 import KAGO_framework.model.GraphicalObject;
@@ -8,11 +8,11 @@ import my_project.control.ProgramController;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
-public class Washer extends GraphicalObject implements Interactable {
+public class WasherGUI extends GraphicalObject implements Interactable {
 
     private ProgramController programController;
 
-    public Washer(ProgramController programController){
+    public WasherGUI(ProgramController programController){
         this.programController = programController;
     }
 
